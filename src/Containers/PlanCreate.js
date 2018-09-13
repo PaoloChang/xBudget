@@ -12,7 +12,6 @@ export default class PlanCreate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            planData,
             newData: {
                 title: '',
                 income: '',
@@ -32,14 +31,6 @@ export default class PlanCreate extends React.Component {
             
         // }
     };
-
-    componentDidMount() {
-        if(planData) {
-            this.setState({
-                planData: JSON.parse(planData)
-            })
-        }
-    }
 
     render() {
         return (
