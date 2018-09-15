@@ -5,33 +5,12 @@ import { Camera, FileSystem, Permissions } from 'expo';
 export default class CameraView extends React.Component {
   state = {
     hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
-    photoName: "No photo taken",
+    type: Camera.Constants.Type.back
   };
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
-  }
-
-  componentDidMount() {
-    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
-      console.log(e, 'Directory exists');
-    });
-  }
-
-  takePicture = () => {
-    if (this.camera) {
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
-    }
-  };
-
-  onPictureSaved = async photo => {
-    await FileSystem.moveAsync({
-      from: photo.uri,
-      to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
-    });
-    this.setState({ photoName: "Photo clicked" });
   }
 
   render() {
@@ -46,30 +25,14 @@ export default class CameraView extends React.Component {
           <Camera 
             style={{ flex: 1 }} 
             type={this.state.type}
-            ref={ref => {
-              this.camera = ref;
-            }}>
+            >
             <View
               style={{
                 flex: 1,
                 backgroundColor: 'transparent',
                 flexDirection: 'row'
               }}>
-              <TouchableOpacity
-                style={{
-                  flex: 1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center'
-                }}
-                onPress={this.takePicture}>
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: 'white', backgroundColor: 'steelblue'
-                }}>
-                  
-                  { this.state.photoName }
-
-                </Text>
-              </TouchableOpacity>
+              
             </View>
           </Camera>
         </View>
