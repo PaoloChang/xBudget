@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { VictoryBar } from 'victory-native';
 
 export default class ReportView extends Component {
     static navigationOptions = {
@@ -10,6 +11,7 @@ export default class ReportView extends Component {
         return (
             <View style={styles.container}>
                 <Text>ReportView</Text>
+                <VictoryBar />
             </View>
         );
     }

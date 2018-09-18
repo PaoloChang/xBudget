@@ -12,9 +12,11 @@
     "expo": "^29.0.0",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
+    "react-native-svg": "^7.0.2",
     "react-navigation": "^2.12.1",
     "react-navigation-redux-helpers": "^2.0.5",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "victory-native": "^30.4.0"
   }
 }
