@@ -6,11 +6,11 @@ import {
     TouchableOpacity,
     View, 
     Text, 
-    Button,
+    // Button,
     Platform,
     AsyncStorage
  } from 'react-native';
- import { List, ListItem, colors } from 'react-native-elements';
+ import { List, ListItem, Button, colors } from 'react-native-elements';
  import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -57,7 +57,16 @@ const demoData = [
         type: 'saving', 
         data: [
             { title: 'Coffee', amount: 2, period: 'daily' },
-            { title: 'Snack', amount:5 , period: 'daily' }
+            { title: 'Snack', amount:5 , period: 'daily' },
+
+            { title: 'Coffee1', amount: 2, period: 'daily' },
+            { title: 'Snack1', amount:5 , period: 'daily' },
+
+            { title: 'Coffee2', amount: 2, period: 'daily' },
+            { title: 'Snack2', amount:5 , period: 'daily' },
+
+            { title: 'Coffee3', amount: 2, period: 'daily' },
+            { title: 'Snack3', amount:5 , period: 'daily' }
         ] 
     }
 ]
@@ -69,9 +78,10 @@ export default class PlansListView extends Component {
         this.state = {
             selectedKey: -1,
             selectedItemType: '',
-            planData: []
+            plansData: []
         };
 
+        // this.checkData = this.checkData.bind(this);
         this.handlePressItem = this.handlePressItem.bind(this);
     }
 
@@ -81,41 +91,70 @@ export default class PlansListView extends Component {
     static navigationOptions = {
         // header: null,
         title: 'Budget Plans',
-        drawewrLabel: 'PlansViewList',
+        // drawewrLabel: 'PlansListView',
         headerRight: (
-            <Button
-                icon={
-                    <Icon
-                        name='plus'
-                        size={30}
-                        color='yellow'
-                        />
-                }
-                // style={ styles.headerButton }
-                title=''
-                onPress={ () => alert('This is a button!') }
-            />
+            <Icon
+                name='plus-square'
+                size={30}
+                color='blue'
+                onPress={() => alert('Let\'s create plan')}
+                // onPress={ () => this.props.navigation.navigate('PlanCreate') }
+                containerStyle={{margin: 50}}
+                />
           ),
     };
 
+    _emptyData = async () => {
+        try {
+            AsyncStorage.setItem('plansData', '');
+        }
+        catch (error) {
+            console.log('_emptyData() error: ' + error);
+        }
+    }
+
+    _loadInitialState = async () => {
+        try {
+            let data = await AsyncStorage.getItem('plansData');
+
+            if( data != null ) {
+                this.setState({
+                    plansData: JSON.parse(data)
+                })
+            }
+            else {
+                let demo = await AsyncStorage.setItem('plansData', JSON.stringify(demoData));
+                this.setState({
+                    plansData: demo
+                })
+            }
+        }
+        catch (error) {
+            console.log("_loadInitialState() error: " + error);
+        }
+    }
+
     componentWillMount() {
 
-        this.setState({
-            planData: demoData
-        })
+        /** Working without AsyncStorage */
 
-        // if(!this.state.budgetDate.lenght) {
-        //     AsyncStorage.setItem('budgetData', JSON.stringify(this.state.budgetData));
-        // }
-        // if(!this.state.planData.length) {
-        //     AsyncStorage.setItem('planData', JSON.stringify(this.state.planData));
-        // }
+        // this.setState({
+        //     plansData: demoData
+        // })
+        
+        /** USE _emptyData() to empty AsyncStorage.plansData */
+
+        // this._emptyData().done();
+
+        /** USE _loadInitialState() to check plansData exist */
+
+        this._loadInitialState().done();        
     }
 
     componentDidMount() {
 
-        // if(!this.state.planData.length) {
-        //     let tmp = AsyncStorage.getItem('planData');
+        // if(!this.state.plansData.length) {
+        //     let tmp = AsyncStorage.getItem('plansData');
         //     setState({ planDate: JSON.parse(tmp) });
         // }
 
@@ -123,24 +162,13 @@ export default class PlansListView extends Component {
 
         // if(planListView) {
         //     this.setState({
-        //         planData: JSON.parse(planData)
+        //         plansData: JSON.parse(plansData)
         //     })
         // }
 
         // Enable demoData
         // AsyncStorage.setItem('planListView', JSON.stringify(demoData));
     }
-
-    // componentDidUpdate(prevState) {
-
-    //     if(JSON.stringify(prevState.budgetData) != JSON.stringify(this.state.budgetData)) {
-    //         AsyncStorage.setItem('budgetData', JSON.stringify(this.state.budgetData));
-    //     }
-    //     if(JSON.stringify(prevState.planData) != JSON.stringify(this.state.planData)) {
-    //         AsyncStorage.setItem('planData', JSON.stringify(this.state.planData));
-    //     }
-    // }
-    
 
     // displayPlansList = async () => {
     //     try {
@@ -160,13 +188,13 @@ export default class PlansListView extends Component {
     // }
 
     handlePressItem(item) {
-        alert(item.title)
+        alert("title: " + item.item.title + "\namount: " + item.item.amount + "\nperiod: " + item.item.period);
     }
 
     renderItem = (item) => {
         return (
             <TouchableOpacity style={ styles.item } 
-                onPress={ this.handlePressItem }>
+                onPress={ (event) => this.handlePressItem(item) }>
                 <Text style={ styles.itemTitle }>{ item.item.title }</Text>
                 <Text style={ styles.itemSubtitle} >{ '$' + item.item.amount + ' | ' + item.item.period }</Text>
             </TouchableOpacity>
@@ -185,7 +213,7 @@ export default class PlansListView extends Component {
                 <SectionList
                     renderItem={ this.renderItem }
                     renderSectionHeader={ this.renderHeader }
-                    sections={ this.state.planData }
+                    sections={ this.state.plansData }
                     keyExtractor={ (item) => item.title }/>
             </View>
 
@@ -193,7 +221,7 @@ export default class PlansListView extends Component {
 
             // <List style={styles.scene} >
             //     <FlatList
-            //         data={this.planData} 
+            //         data={this.plansData} 
             //         renderItem={({plan}) => (
             //             <Text>{plan.title}</Text>
             //             // <ListItem 
@@ -243,7 +271,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     // headerButton: {
-    //     fontWeight: 'bold',
+    //     margin: 10
+    //     // fontWeight: 'bold',
     //     // backgroundColor: 'rgba(255, 255, 255, 0.3)'
     // },
     item: {
@@ -262,7 +291,7 @@ const styles = StyleSheet.create({
     }, 
     itemSubtitle: {
         fontSize: 15,
-        // color: this.state.planData.type == 'saving' ? 'green' : 'red'
+        // color: this.state.plansData.type == 'saving' ? 'green' : 'red'
     }
 
 });
