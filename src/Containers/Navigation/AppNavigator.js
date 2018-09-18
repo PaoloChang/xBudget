@@ -12,6 +12,8 @@ import ExpenseCreate from '../ExpenseCreate';
 import ReportView from '../ReportView';
 import SettingsView from '../SettingsView'
 
+import CameraView from '../CameraView' //DEBUG_LINE
+
 const AppNavigator = createDrawerNavigator({
     Main: {
         screen: MainView,
@@ -37,6 +39,11 @@ const AppNavigator = createDrawerNavigator({
     Setting: {
         screen: SettingsView,
     },
+//DEBUG_START
+    CameraView: {
+        screen: CameraView,
+    },
+//DEBUG_END
 });
 
 export default AppNavigator;
