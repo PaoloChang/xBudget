@@ -5,9 +5,9 @@ import {
 } from 'react-navigation';
 
 import MainView from '../MainView';
-import PlansViewList from '../PlansViewList';
+import PlansListView from '../PlansListView';
 import PlanCreate from '../PlanCreate';
-import ExpensesViewList from '../ExpensesViewList';
+import ExpensesListView from '../ExpensesListView';
 import ExpenseCreate from '../ExpenseCreate';
 import ReportView from '../ReportView';
 import SettingsView from '../SettingsView'
@@ -20,7 +20,7 @@ const AppNavigator = createDrawerNavigator({
     },
     Budget: {
         screen: createStackNavigator({
-            PlanList: PlansViewList,
+            PlanList: PlansListView,
             PlanCreate: PlanCreate,
             // navigationOptions: {
             //     header: { visivle: false }
@@ -29,7 +29,7 @@ const AppNavigator = createDrawerNavigator({
     },
     Expense: {
         screen: createStackNavigator({
-            ExpenseList: ExpensesViewList,
+            ExpenseList: ExpensesListView,
             ExpenseCreate: ExpenseCreate,
         }) 
     },
