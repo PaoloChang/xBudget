@@ -20,6 +20,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.xbudget.xbudget"
+    },
     "ios": {
       "supportsTablet": true
     }

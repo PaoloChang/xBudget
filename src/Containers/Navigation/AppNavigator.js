@@ -20,11 +20,14 @@ const AppNavigator = createDrawerNavigator({
     },
     Budget: {
         screen: createStackNavigator({
-            PlanList: PlansListView,
-            PlanCreate: PlanCreate,
+            PlanList: { screen: PlansListView },
+            PlanCreate: { screen: PlanCreate },
             // navigationOptions: {
             //     header: { visivle: false }
             // }
+        }, {
+            initialRouteName: 'PlanList',
+            headerMode: 'screen'
         })
     },
     Expense: {

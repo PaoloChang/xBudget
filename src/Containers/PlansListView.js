@@ -12,6 +12,7 @@ import {
  } from 'react-native';
  import { List, ListItem, Button, colors } from 'react-native-elements';
  import Icon from 'react-native-vector-icons/FontAwesome';
+ import HeaderButtons, { HeaderButton, Item } from 'react-navigation-header-buttons';
 
 
 // const demoData = [
@@ -88,21 +89,30 @@ export default class PlansListView extends Component {
     // LOOK FOR expo vector-icons
     // https://expo.github.io/vector-icons/
 
-    static navigationOptions = {
-        // header: null,
-        title: 'Budget Plans',
-        // drawewrLabel: 'PlansListView',
-        headerRight: (
-            <Icon
-                name='plus-square'
-                size={30}
-                color='blue'
-                onPress={() => alert('Let\'s create plan')}
-                // onPress={ () => this.props.navigation.navigate('PlanCreate') }
-                containerStyle={{margin: 50}}
+    static navigationOptions = ({navigation}) => ({
+            // header: null,
+            title: 'Budget Plans',
+            headerRight: (
+                <Icon 
+                    name='plus-square'
+                    size={30}
+                    onPress={ () => navigation.navigate('PlanCreate') }                
+                    backgroundColor= "rgba(0,0,0,0)"
+                    // color="rgba(0,122,255,1)"
+                    containerStyle={{margin: 50}}
                 />
-          ),
-    };
+            )});
+        
+            
+            // <Icon
+            //     name='plus-square'
+            //     size={30}
+            //     color='blue'
+            //     // onPress={() => alert('Let\'s create plan')}
+            //     onPress={ () => this.props.navigation.navigate('PlanCreate')}
+            //     // onPress={ () => this.props.navigation.navigate('screen/PlanCreate') }
+            //     containerStyle={{margin: 50}}
+            //     />
 
     _emptyData = async () => {
         try {
