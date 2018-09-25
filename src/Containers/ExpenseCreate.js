@@ -15,7 +15,7 @@ export default class PlanCreate extends React.Component {
             <View style={styles.container}>
                 <Text>Create Expense History</Text>
                 <Button 
-                    onPress={() => this.props.navigation.navigate('ExpenseList')}
+                    onPress={() => this.props.navigation.navigate('hello friend')}
                     title='Submit'/>
             </View>
         );
