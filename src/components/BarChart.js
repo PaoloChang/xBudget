@@ -15,7 +15,6 @@ import {
 import { random, range } from "lodash";
 
 const data = [
-  {quarter: 0, earnings: 0},
   {quarter: 1, earnings: 13000},
   {quarter: 2, earnings: 16500},
   {quarter: 3, earnings: 14250},
@@ -26,29 +25,30 @@ export default class BarChart extends Component {
   render() {
     return (
       <View style={styles.container}>
-      <Text>This is bar with mock</Text>
-      <VictoryChart >
-        <VictoryAxis
-          // tickValues specifies both the number of ticks and where
-          // they are placed on the axis
-          tickValues={[0, 1, 2, 3, 4]}
-          tickFormat={["","Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
-        />
-
-        <VictoryAxis
-          dependentAxis
-          // tickFormat specifies how ticks should be displayed
-          tickFormat={(x) => (`$${x / 1000}k`)}
-        />
-
-        <VictoryBar
-          sytle={styles.barStyle}
-          data = {data}
-          x="quater"
-          y="earnings"
-        />
-        
-      </VictoryChart>
+        <Text>This is bar with mock</Text>
+        <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }}>
+          <VictoryAxis
+            // tickValues specifies both the number of ticks and where
+            // they are placed on the axis
+            tickValues={[1, 2, 3, 4]}
+            tickFormat={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
+          />
+      
+          <VictoryAxis
+            dependentAxis
+            // tickFormat specifies how ticks should be displayed
+            tickFormat={(x) => (`$${x / 1000}k`)}
+          />
+      
+          <VictoryBar
+            style={{ data: { fill: "#c43a31" } }}
+            data = {data}
+            alignment="start"
+            x="quarter"
+            y="earnings"
+          />
+          
+        </VictoryChart>
       </View>
     );
   }
@@ -62,10 +62,6 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     paddingRight: 50,
     paddingTop: 50,
-  },
-  barStyle: {
-    color: "blue",
-    opacity: 0.5,
   },
   text: {
     fontSize: 18,
