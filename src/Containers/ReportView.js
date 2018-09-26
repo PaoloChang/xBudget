@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { VictoryBar } from 'victory-native';
-import BarChart from '../components/BarChart';
+import BarChart from '../Components/BarChart';
 
 export default class ReportView extends Component {
     static navigationOptions = {
