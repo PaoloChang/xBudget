@@ -127,6 +127,8 @@ export default class PlansListView extends Component {
         try {
             let data = await AsyncStorage.getItem('plansData');
 
+            alert(data);
+
             if( data != null ) {
                 this.setState({
                     plansData: JSON.parse(data)
