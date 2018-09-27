@@ -20,14 +20,32 @@ export default class PlanCreate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: '',
+            type: 'budget',
+            oldData: [ { type: 'budget', data: [{}] }, { type: 'saving', data: [{}] } ],
             newData: {
                 title: '',
-                income: '',
-                period: ''
-            }
+                amount: '',
+                period: 'onetime',
+            },
+            test: [
+                "1", "2", "3"
+            ]
         };
         
+        // this.handleSubmitButton = this.handleSubmitButton.bind(this);
+    }
+
+    componentDidMount = async () => {
+        try {
+            let fetched = await AsyncStorage.getItem('plansData');
+            
+            this.setState({
+                oldData: JSON.parse(fetched)
+            });
+        }
+        catch(error) {
+            alert("Error detected: loading AsyncStorage plansData failed.");
+        }
     }
 
     static navigationOptions = {
@@ -36,68 +54,125 @@ export default class PlanCreate extends React.Component {
             backgroundColor: '#1e90ff',
         },
         headerTintColor: '#fff'
-        // headerTitleStyle: {
-            
-        // }
     };
 
-    handleTitle = (e) => {
-        let nextState = {};
-        nextState[e.target.newData.title] = e.target.value;
+    handleTitleInput = (input) => {
         this.setState(prevState => ({
-            data: {
-                title: nextState,
-                ...prevState
+            newData: {
+                ...prevState.newData,
+                title: input
             }
         }));
     }
 
-    handleAmount = (e) => {
-        let nextState = {};
-        nextState[e.target.newData.amount] = e.target.value;
+    handleAmountInput = (input) => {
         this.setState(prevState => ({
-            data: {
-                ...prevState,
-                amount: nextState
+            newData: {
+                ...prevState.newData,
+                amount: input
             }
         }));
+    }
+
+    handlePeriodPicker = (value) => {
+        this.setState(prevState => ({
+            newData: {
+                ...prevState.newData,
+                period: value
+            }
+        }));
+    }
+
+    updateListItems = (type) => {
+
+        if(type == "budget") {
+
+            let newState = Object.assign({}, this.state);
+            let planAdded = this.state.oldData[0].data.concat(this.state.newData);
+
+            console.log("\n\n\nPLAN ADDED\n\n\n");
+            console.log(planAdded);
+            
+            newState.oldData[0].data = planAdded;
+
+            this.setState(newState);
+        }
+        else {
+
+            let newState = Object.assign({}, this.state);
+            let planAdded = this.state.oldData[1].data.concat(this.state.newData);
+
+            console.log("\n\n\nPLAN ADDED\n\n\n");
+            console.log(planAdded);
+
+            newState.oldData[1].data = planAdded;
+
+            this.setState(newState);
+        }
+    }
+
+    handleSubmitButton = async () => {
+
+        try {
+
+            this.updateListItems(this.state.type);
+
+            console.log("\n\n\n NEW UPDATED OLDDATA\n\n\n")
+
+            console.log(this.state.oldData);
+
+            await AsyncStorage.setItem('plansData', JSON.stringify(this.state.oldData));
+            
+            this.props.navigation.navigate('PlanList');
+        }
+        catch (error) {
+            alert("Error detected: saving AsyncStorage plansData failed.\nError: " + error);
+            console.log("handleSubmitButton() error: " + error);
+        }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <FormLabel>Type:</FormLabel>
-                <Picker
-                    selectedValue={this.state.type}
-                    style={{ height: 50, width: 200 }}
-                    onValueChange={(planType, itemIndex) => this.setState({type: planType})}>
-                    <Picker.Item label="Budget" value="budget" />
-                    <Picker.Item label="Saving" value="saving" />
-                </Picker>
 
-                <FormLabel>Title:</FormLabel>
-                <FormInput onChangeText={this.handleTitle}/> 
-                <FormValidationMessage>Error message</FormValidationMessage>
+                <View style={styles.inputGroup}>
+                    <FormLabel>Type:</FormLabel>
+                    <Picker
+                        selectedValue={this.state.type}
+                        style={{ height: 50, width: 120 }}
+                        onValueChange={(planType) => this.setState({type: planType})}>
+                        <Picker.Item label="Budget" value="budget" />
+                        <Picker.Item label="Saving" value="saving" />
+                    </Picker>
+                </View>
 
-                <FormLabel>Amount:</FormLabel>
-                <FormInput onChangeText={this.handleAmount}/> 
-                <FormValidationMessage>Error message</FormValidationMessage>
+                <View style={styles.inputGroup} >
+                    <Text>Title:</Text>
+                    <TextInput style={styles.textInput} onChangeText={this.handleTitleInput}/> 
+                </View>
+                <Text id="validateTitle" style={styles.validation }>Error message</Text>
+
+                <View style={styles.inputGroup} >
+                    <Text>Amount:</Text>
+                    <TextInput style={styles.textInput} onChangeText={this.handleAmountInput}/> 
+                </View>
+                <Text id="validateAmount" style={styles.validation} >Error message</Text>
                 
-                <FormLabel>Period:</FormLabel>
+                <View style={styles.inputGroup} >
+                    <FormLabel>Period:</FormLabel>
+                    <Picker
+                        selectedValue={this.state.newData.period}
+                        style={{ height: 50, width: 150 }}
+                        onValueChange={this.handlePeriodPicker} >
+                        <Picker.Item label="One time" value="onetime" />
+                        <Picker.Item label="Weekly" value="weekly" />
+                        <Picker.Item label="Bi-weekly" value="biweekly" />
+                        <Picker.Item label="Monthly" value="monthly" />
+                    </Picker>
+                </View>
                 
-                <Picker
-                    selectedValue={this.state.period}
-                    style={{ height: 50, width: 200 }}
-                    onValueChange={(planPeriod, itemIndex) => this.setState({period: planPeriod})}>
-                    <Picker.Item label="One time" value="onetime" />
-                    <Picker.Item label="Weekly" value="weekly" />
-                    <Picker.Item label="Bi-weekly" value="biweekly" />
-                    <Picker.Item label="Monthly" value="monthly" />
-                </Picker>
-                <FormValidationMessage>Error message</FormValidationMessage>
-
-                <Button 
-                    onPress={() => this.props.navigation.navigate('PlanList')}
+                <Button
+                    onPress={this.handleSubmitButton.bind(this)}
                     title='Submit'/>
             </View>
         );
@@ -111,4 +186,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    inputGroup: {
+        flexDirection: "row"
+    },
+    textInput: {
+        width: "50%",
+        borderBottomColor: "#555",
+    },
+    validation: {
+        color: "#f00",
+        fontSize: 11,
+    }
 });
