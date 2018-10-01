@@ -90,19 +90,27 @@ export default class PlansListView extends Component {
     // https://expo.github.io/vector-icons/
 
     static navigationOptions = ({navigation}) => ({
-            // header: null,
-            title: 'Budget Plans',
-            headerRight: (
-                <Icon 
-                    name='plus-square'
-                    size={30}
-                    onPress={ () => navigation.navigate('PlanCreate') }                
-                    backgroundColor= "rgba(0,0,0,0)"
-                    // color="rgba(0,122,255,1)"
-                    containerStyle={{margin: 50}}
-                />
-            )});
-        
+    // header: null,
+        title: 'Budget Plans',
+        headerRight: (
+            <Icon 
+                name='plus-square'
+                size={30}
+                onPress={ () => navigation.navigate('PlanCreate', { handleUpdate: this.handleUpdate.bind(this) }) }                
+                backgroundColor= "rgba(0,0,0,0)"
+                // color="rgba(0,122,255,1)"
+                containerStyle={{margin: 50}}
+            />
+    )});
+
+    handleUpdate = newData => {
+
+        console.log("handleUpdate() trigger");
+        alert(newData);
+        this.setState({
+            newData
+        });
+    }
             
             // <Icon
             //     name='plus-square'
@@ -310,3 +318,4 @@ const styles = StyleSheet.create({
 
 //AppRegistry.registerComponent('MyAppName', () => MyRootComponent);
 AppRegistry.registerComponent('xbudget', () => App);
+//for review
