@@ -310,3 +310,4 @@ const styles = StyleSheet.create({
 
 //AppRegistry.registerComponent('MyAppName', () => MyRootComponent);
 AppRegistry.registerComponent('xbudget', () => App);
+//for review
