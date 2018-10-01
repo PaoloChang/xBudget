@@ -111,24 +111,35 @@ export default class PlanCreate extends React.Component {
         }
     }
 
-    handleSubmitButton = async () => {
+    // handleSubmitButton = async () => {
 
-        try {
+    //     try {
 
-            this.updateListItems(this.state.type);
+    //         this.updateListItems(this.state.type);
 
-            console.log("\n\n\n NEW UPDATED OLDDATA\n\n\n")
+    //         console.log("\n\n\n NEW UPDATED OLDDATA\n\n\n")
 
-            console.log(this.state.oldData);
+    //         console.log(this.state.oldData);
 
-            await AsyncStorage.setItem('plansData', JSON.stringify(this.state.oldData));
+    //         await AsyncStorage.setItem('plansData', JSON.stringify(this.state.oldData));
             
-            this.props.navigation.navigate('PlanList');
-        }
-        catch (error) {
-            alert("Error detected: saving AsyncStorage plansData failed.\nError: " + error);
-            console.log("handleSubmitButton() error: " + error);
-        }
+    //         this.props.navigation.navigate('PlanList');
+    //     }
+    //     catch (error) {
+    //         alert("Error detected: saving AsyncStorage plansData failed.\nError: " + error);
+    //         console.log("handleSubmitButton() error: " + error);
+    //     }
+    // }
+
+    handleSubmitButton() {
+        // const { navigation } = this.props;
+        // const { params } = this.props.navigation.state;
+        // const { newData } = params ? params: null;
+        // this.props.navigation.setParams({ newData: this.state.newData })
+
+        this.props.navigation.state.params.handleUpdate({ newData: this.state.newData });
+        console.log("in PlanCreate handleSubmitButton(), newData: " + this.state.newData );
+        this.props.navigation.goBack();
     }
 
     render() {
